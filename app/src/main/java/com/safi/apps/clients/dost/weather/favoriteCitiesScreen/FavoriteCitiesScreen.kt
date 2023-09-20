@@ -1,8 +1,11 @@
 package com.safi.apps.clients.dost.weather.favoriteCitiesScreen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,9 +13,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -26,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -91,7 +97,7 @@ private fun FavoriteCitiesScreen(
                 .padding(paddingValues)
         ) {
             Column(
-                modifier = Modifier,
+                modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
@@ -111,8 +117,9 @@ private fun FavoriteCitiesScreen(
                     }
                 } else {
                     FavoritesList(
-                        modifier = Modifier,
-                        favorites = state.favorites
+                        modifier = Modifier.weight(1f),
+                        favorites = state.favorites,
+                        onDeleteClick = state.onRemoveFavoriteClick
                     )
                 }
             }
@@ -124,14 +131,44 @@ private fun FavoriteCitiesScreen(
 private fun FavoritesList(
     modifier: Modifier,
     favorites: List<City>,
+    onDeleteClick: (City) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(16.dp)
     ) {
         items(favorites) { city ->
-            Text(text = city.name)
+            CityItem(
+                modifier = Modifier.fillParentMaxWidth(),
+                city = city,
+                onDeleteClick = { onDeleteClick(city) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun CityItem(
+    modifier: Modifier = Modifier,
+    city: City,
+    onDeleteClick: () -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .clip(MaterialTheme.shapes.small)
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = city.name,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+        IconButton(onClick = onDeleteClick) {
+            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
         }
     }
 }
