@@ -28,16 +28,16 @@ class FavoritesCacheImpl private constructor(
         }
     }
 
-    private val _favorites = MutableStateFlow<List<City>>(emptyList())
+    private val _favorites = MutableStateFlow(getAll())
     override val favorites: Flow<List<City>> = _favorites
     private fun getAll(): List<City> {
-        return sharedPreferences.getString(KEY_FAVORITES, null)?.let {json ->
+        return sharedPreferences.getString(KEY_FAVORITES, null)?.let { json ->
             gson.fromJson(json, object : TypeToken<List<City>>() {}.type)
         } ?: emptyList()
     }
 
     override suspend fun addCity(city: City) {
-        val newItems = getAll() + city
+        val newItems = (getAll() + city).distinct()
         sharedPreferences.edit().apply {
             putString(KEY_FAVORITES, gson.toJson(newItems))
             apply()

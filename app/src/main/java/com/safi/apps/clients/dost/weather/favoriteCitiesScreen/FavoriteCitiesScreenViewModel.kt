@@ -7,6 +7,7 @@ import com.safi.apps.clients.dost.weather.data.repository.FavoritesRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class FavoriteCitiesScreenViewModel(
     private val favoritesRepository: FavoritesRepository,
@@ -25,6 +26,10 @@ class FavoriteCitiesScreenViewModel(
         FavoriteCitiesScreenState()
     )
 
-    private fun onAddFavoriteClick(city: City) {}
-    private fun onRemoveFavoriteClick(city: City) {}
+    private fun onAddFavoriteClick(city: City) {
+        viewModelScope.launch { favoritesRepository.addFavorite(city) }
+    }
+    private fun onRemoveFavoriteClick(city: City) {
+        viewModelScope.launch { favoritesRepository.removeFavorite(city) }
+    }
 }

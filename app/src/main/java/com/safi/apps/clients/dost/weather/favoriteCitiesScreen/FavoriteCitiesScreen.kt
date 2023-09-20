@@ -51,7 +51,7 @@ fun FavoriteCitiesScreen(
 private fun FavoriteCitiesScreen(
     state: FavoriteCitiesScreenState,
 ) {
-    var showCityPicker by rememberSaveable() {
+    var showCityPicker by rememberSaveable {
         mutableStateOf(false)
     }
     if (showCityPicker) {
