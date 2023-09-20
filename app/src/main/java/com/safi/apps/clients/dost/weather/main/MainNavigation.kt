@@ -16,7 +16,9 @@ fun MainNavigation(
         startDestination = MainScreen.FAVORITES.route
     ) {
         composable(route = MainScreen.FAVORITES.route) {
-            FavoriteCitiesScreen()
+            FavoriteCitiesScreen(
+                onAddClick = {}
+            )
         }
         composable(route = MainScreen.CITIES.route) {
             CitiesScreen()
