@@ -2,6 +2,7 @@ package com.safi.apps.clients.dost.weather.favoriteCitiesScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.safi.apps.clients.dost.weather.data.model.City
 import com.safi.apps.clients.dost.weather.data.repository.FavoritesRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -14,12 +15,16 @@ class FavoriteCitiesScreenViewModel(
 
     val state = favorites.map { favorites ->
         FavoriteCitiesScreenState(
-            favorites = favorites
+            favorites = favorites,
+            onAddFavoriteClick = this::onAddFavoriteClick,
+            onRemoveFavoriteClick = this::onRemoveFavoriteClick
         )
     }.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
-        FavoriteCitiesScreenState(favorites = emptyList())
+        FavoriteCitiesScreenState()
     )
 
+    private fun onAddFavoriteClick(city: City) {}
+    private fun onRemoveFavoriteClick(city: City) {}
 }

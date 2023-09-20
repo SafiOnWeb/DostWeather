@@ -1,6 +1,7 @@
 package com.safi.apps.clients.dost.weather.di
 
 import com.google.gson.Gson
+import com.safi.apps.clients.dost.weather.citiesScreen.CitiesScreenViewModel
 import com.safi.apps.clients.dost.weather.data.api.MockWeatherApi
 import com.safi.apps.clients.dost.weather.data.api.WeatherApi
 import com.safi.apps.clients.dost.weather.data.cache.FavoritesCache
@@ -27,7 +28,11 @@ val appModule = module {
         )
     }
     // Repository
-    factory<WeatherRepository> { WeatherRepositoryImpl() }
+    factory<WeatherRepository> {
+        WeatherRepositoryImpl(
+            weatherApi = get()
+        )
+    }
     factory<FavoritesRepository> {
         FavoritesRepositoryImpl(
             favoritesCache = get()
@@ -37,6 +42,11 @@ val appModule = module {
     viewModel {
         FavoriteCitiesScreenViewModel(
             favoritesRepository = get()
+        )
+    }
+    viewModel {
+        CitiesScreenViewModel(
+            weatherRepository = get()
         )
     }
 }
